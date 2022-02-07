@@ -11,6 +11,15 @@ pip install google-api-python-client oauth2client
 pip install --upgrade oauth2client
 """
 
+def write_result(work_type, url, date):
+    if work_type == 'database':
+        db = MySQLi(host, user, password, database_home)
+        db.commit("INSERT INTO indexing_api (url, date) VALUES (%s, %s)", url_new, datetime.date.today())
+    elif work_type == 'txt_file':
+        with open('result.txt', 'w+', encoding='utf-8') as result_file:
+            string_write = f"{url};{date}\n"
+            result_file.write(string_write)
+
 SCOPES = ["https://www.googleapis.com/auth/indexing"]
 
 
@@ -55,16 +64,15 @@ for root, dirs, files in os.walk("json_keys"):
                 new_file.write(url)
             else:
                 request_google_api = indexURL2(url_new, http)
-                db = MySQLi(host, user, password, database_home)
-                db.commit("INSERT INTO indexing_api (url, seo_id, date) VALUES (%s, %s, %s)", url_new,
-                          int('999999'), datetime.date.today())
-
-                count_urls += 1
+                
             if 'Error' in request_google_api:
                 flag = True
                 new_file.write(url)
                 request_google_api = ''
-                count_urls -= 1
+            else:
+                write_result('txt_file', url_new, datetime.date.today())
+                count_urls += 1
+                
         new_file.close()
 
 print("Отправлено на индексацию: " + str(count_urls) + " шт.")
