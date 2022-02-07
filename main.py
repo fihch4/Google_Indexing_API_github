@@ -70,8 +70,9 @@ for root, dirs, files in os.walk("json_keys"):
                 new_file.write(url)
                 request_google_api = ''
             else:
-                write_result('txt_file', url_new, datetime.date.today())
-                count_urls += 1
+                if not flag:
+                    write_result('txt_file', url_new, datetime.date.today())
+                    count_urls += 1
                 
         new_file.close()
 
