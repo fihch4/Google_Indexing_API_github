@@ -16,7 +16,7 @@ def write_result(work_type, url, date):
         db = MySQLi(host, user, password, database_home)
         db.commit("INSERT INTO indexing_api (url, date) VALUES (%s, %s)", url_new, datetime.date.today())
     elif work_type == 'txt_file':
-        with open('result.txt', 'w+', encoding='utf-8') as result_file:
+        with open('result.txt', 'a', encoding='utf-8') as result_file:
             string_write = f"{url};{date}\n"
             result_file.write(string_write)
 
